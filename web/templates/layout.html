@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>豆瓣电影数据可视化</title>
+	<script src="https://cdn.bootcss.com/echarts/3.7.0/echarts.min.js"></script>
+	<link rel="shortcut icon" href="{{url_for('static',filename='img/logo.png')}}">
+	<style>
+		body {
+			margin: 0;
+			font-family:微软雅黑;
+			background-color: #fffff0;
+		}
+
+		header {
+			position: relative;
+			background-image: url("../static/img/header.png");
+			/*background-image: url("{{url_for('static',filename='img/logo.png')}}");*/
+			background-size: cover;
+		}
+
+		header div{
+			height: 60px;
+			background: #e0a000;
+			box-sizing: border-box;
+			padding-left:  100px;
+
+		}
+
+		h1{
+			color: #fff;
+			margin: 0;
+			line-height: 60px;
+
+		}
+
+		nav{
+			position: absolute;
+			right: 120px;
+			top: 20px;
+
+		}
+
+		nav a{
+			text-decoration: none;
+			color: #fff;
+			font-size: 1em;
+			font-weight: bolder;
+			padding: 5px 12px;
+			border: 2px solid #fff;
+			border-radius: 8px;
+			margin-right: 8px;
+			transition: .2s;
+	        -o-transition: .2s;
+	        -ms-transition: .2s;
+	        -moz-transition: .2s;
+	        -webkit-transition: .2s;
+		}
+
+		nav a.active{
+			color: #e08000;
+			background-color: #fff;
+			box-shadow: 1px 1px 3px #555;
+		}
+
+		header p{
+			width: 950px;
+			color: #444;
+			margin: 10px 100px;
+			text-indent: 2em;
+		}
+
+		header p a{
+			text-decoration: none;
+			color: #8080ff;
+			margin-left: 2px;
+			margin-right: 2px;
+			transition: .2s;
+	        -o-transition: .2s;
+	        -ms-transition: .2s;
+	        -moz-transition: .2s;
+	        -webkit-transition: .2s;
+		}
+
+		header p a:hover{
+			color: #3030ff;
+		}
+
+		footer{
+			background-color: #653;
+			color: #fff;
+			text-align: center;
+			padding: 15px;
+		}
+	</style>
+	{% block style %} {% endblock %}
+</head>
+<body>
+	<header>
+		<div>
+			<h1>豆瓣电影数据可视化</h1>
+			<nav>
+				<a id="a1" onmouseover="over(this)" onmouseout="out(this)" href="{{url_for('index')}}">统计</a>
+				<a id="a2" onmouseover="over(this)" onmouseout="out(this)" href="{{url_for('rate')}}">评分</a>
+				<a id="a3" onmouseover="over(this)" onmouseout="out(this)" href="{{url_for('search')}}">搜索</a>
+			</nav>
+		</div>
+		<br>
+		<p>电影原始数据来自豆瓣电影，使用python的requests包爬取数据、BeautifulSoup包完成解析，并且进行数据的预处理和清洗。</p>
+		<p>最终一共获取了4769条电影记录，每条记录包含以下15个字段：电影ID、标题、链接、缩略图、评分、导演、编剧、演员、分类、上映国家、语言、上映时间、时长、别名和简介。</p>
+		<p>在此基础上，使用Echarts进行简单的数据可视化，从而完整地展示网络数据采集、存储、处理和使用四个环节所涉及的技术链。</p>
+		<p>本项目改自<a href="http://zhanghonglun.cn/" target="_blank">张宏伦</a>的<a href="http://zhanghonglun.cn/data-visualization/" target="_blank">同名项目</a>仅用于学习用途。</p>
+		<br>
+	</header>
+	<main>
+		 {% block body %} {% endblock %}
+	</main>
+	<footer>
+		<p>Copyright © 2017 LTilly. All Rights Reserved.</p>
+	</footer>
+</body>
+</html>

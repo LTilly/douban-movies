@@ -1,0 +1,284 @@
+{% extends 'layout.html' %}
+
+{% block style %}
+	<style>
+		main{
+			padding: 30px 100px;
+		}
+
+		#searchForm{
+			position: relative;
+		}
+
+		#formControl{
+			width: 250px;
+			height: 30px;
+			background-color: #fffff4;
+			border-radius: 10px 0 0 10px;
+			border: 2px solid #aa8;
+			position:absolute;
+			padding-left: 10px;
+			font-size: 1em;
+			font-family: 微软雅黑;
+			color: #773;
+		}
+
+		#formControl:focus {
+			border-color: #cc8;
+			box-shadow: 0 0 5px #444;
+			outline: none;
+		}
+
+		#submit{
+			height: 36px;
+			padding: 0 10px;
+			display: inline-block;
+			line-height: 36px;
+			font-weight: bold;
+			color: #fff;
+			background-color: #aa8;
+			border: 0;
+			border-radius: 0 10px 10px 0;
+			position:absolute;
+			left: 262px;
+			cursor: pointer;
+		}
+
+		#submit:hover{
+			border-color: #cc8;
+			background-color: #cc8;
+			box-shadow: 0 0 5px #444;
+			color: #662;
+			transition: .2s;
+	    	-o-transition: .2s;
+	    	-ms-transition: .2s;
+	    	-moz-transition: .2s;
+	    	-webkit-transition: .2s;
+		}
+
+		#noword{
+			height: 36px;
+			padding-left: 10px;
+			display: none;
+			line-height: 36px;
+			color: #f50;
+			font-size: 1.1em;
+			position: absolute;
+			left: 340px;
+		}
+
+		#word{
+			height: 36px;
+			padding-left: 10px;
+			line-height: 36px;
+			color: #444;
+			font-size: 1.1em;
+			position: absolute;
+			left: 340px;
+		}
+
+		#hot,#result{
+			padding: 40px 0;
+		}
+
+		#hot .movie{
+			margin-bottom: 50px;
+			position: relative;
+		}
+
+		#hot .movie .cover{
+			width: 150px;
+			height: 215px;
+			background-size: cover;
+			background-position: center;
+			border-radius: 5px;
+			position: absolute;
+			left: 1px;
+			top: 1px;
+			transition: .2s;
+	    	-o-transition: .2s;
+	    	-ms-transition: .2s;
+	    	-moz-transition: .2s;
+	    	-webkit-transition: .2s;
+		}
+
+		#hot .movie .cover:hover{
+			left: 0px;
+			top: 0px;
+			width: 152px;
+			height: 217px;
+			border-radius: 7px;
+			box-shadow: 4px 4px 8px #333;
+		}
+
+		#hot .info{
+			margin-left: 210px;
+		}
+
+		#hot .info h4{
+			text-indent: -30px;
+			margin-bottom: 10px;
+		}
+
+		#hot .info a{
+			text-decoration: none;
+			color: #d09000;
+			font-size: 1.1em;
+			transition: .2s;
+	    	-o-transition: .2s;
+	    	-ms-transition: .2s;
+	    	-moz-transition: .2s;
+	    	-webkit-transition: .2s;
+		}
+
+		#hot .info a:hover{
+			color: #b07000;
+		}
+
+		#hot .info p{
+			margin: 0;
+			font-size: 0.75em;
+			color: #444;
+			text-indent: -2.5em; 
+		}
+	</style>
+{% endblock %}
+
+{% block body %} 
+	<script>
+		var a1=document.getElementById("a1");
+		var a2=document.getElementById("a2");
+		var a3=document.getElementById("a3");
+		a3.className="active";
+		function over(obj){
+			a1.className="";
+			a2.className="";
+			a3.className="";
+			obj.className="active";
+		}
+		function out(obj){
+			a1.className="";
+			a2.className="";
+			a3.className="active";
+		}
+	</script>
+    <div id="searchForm">
+        <div id="inputGroup">
+            <input type="text" name="keyword" id="formControl" placeholder="输入电影标题">
+            <div id="submit" onclick="search(this)">搜 索</div>
+        </div>
+        <div id="noword">关键词都不给个怎么搜索……</div>
+        {% if key %}
+        	<div id="word">共<span style="color:#641;margin:0 5px">{{results|length}}</span>条含<span id="key" style="color:#461;margin:0 5px">{{key}}</span>的搜索结果</div>
+        {% endif %}
+    </div>
+    <div id="hot">
+	    {% if results|length==0 %}
+	    	{% for mov in movies %}
+		    	<div class="movie">
+		    		<a href="{{mov.url}}" target="_blank">
+		    			<div class="cover" style="background-image: url({{mov.cover}});"></div>
+		    		</a>
+		    		<div class="info">
+			    		<h4>
+			    			<a href="{{mov.url}}" target="_blank">{{mov.title}}</a>
+			    			<span style="color:#783;font-size:0.9em;margin-left:5px;">
+			    				{% if mov.time!=0 %}
+			    					{{mov.time}}年
+			    				{% endif %}
+			    			</span>
+			    			<span style="color:#e75;font-size:0.9em;margin-left:5px;">{{mov.rate}}分</span>
+			    		</h4>
+			    		<p><b>导演&nbsp;&nbsp;</b>{{mov.director}}</p>
+			    		<p><b>编剧&nbsp;&nbsp;</b>{{mov.composer}}</p>
+			    		<p><b>主演&nbsp;&nbsp;</b>{{mov.actor}}</p>
+			    		<p><b>类型&nbsp;&nbsp;</b>{{mov.category}}</p>
+			    		<p><b>产地&nbsp;&nbsp;</b>{{mov.district}}</p>
+			    		<p><b>语言&nbsp;&nbsp;</b>{{mov.language}}</p>
+			    		<p><b>片长&nbsp;&nbsp;</b>{{mov.length}}分钟</p>
+			    		<p><b>又名&nbsp;&nbsp;</b>{{mov.name}}</p>
+			    		<p style="font-size:0.9em;font-weight:bold;text-indent:-2em;margin:5px 0;">剧情简介</p>
+			    		{% for d in mov.description %}
+				    		<p style="text-indent:2em;color:#555;">{{d}}</p>
+			            {% endfor %}
+
+		    		</div>
+		    	</div>
+	    	{% endfor %}
+	    {% else %}
+	    	{% for mov in results %}
+		    	<div class="movie">
+		    		<a href="{{mov.url}}" target="_blank">
+		    			<div class="cover" style="background-image: url({{mov.cover}});"></div>
+		    		</a>
+		    		<div class="info">
+			    		<h4>
+			    			<a href="{{mov.url}}" target="_blank">{{mov.title}}</a>
+			    			<span style="color:#783;font-size:0.9em;margin-left:5px;">
+			    				{% if mov.time!=0 %}
+			    				{{mov.time}}年
+			    				{% endif %}
+			    			</span>
+			    			<span style="color:#e75;font-size:0.9em;margin-left:5px;">{{mov.rate}}分</span>
+			    		</h4>
+			    		<p><b>导演&nbsp;&nbsp;</b>{{mov.director}}</p>
+			    		<p><b>编剧&nbsp;&nbsp;</b>{{mov.composer}}</p>
+			    		<p><b>主演&nbsp;&nbsp;</b>{{mov.actor}}</p>
+			    		<p><b>类型&nbsp;&nbsp;</b>{{mov.category}}</p>
+			    		<p><b>产地&nbsp;&nbsp;</b>{{mov.district}}</p>
+			    		<p><b>语言&nbsp;&nbsp;</b>{{mov.language}}</p>
+			    		<p><b>片长&nbsp;&nbsp;</b>{{mov.length}}分钟</p>
+			    		<p><b>又名&nbsp;&nbsp;</b>{{mov.name}}</p>
+			    		<p style="font-size:0.9em;font-weight:bold;text-indent:-2em;margin:5px 0;">剧情简介</p>
+			    		{% for d in mov.description %}
+				    		<p style="text-indent:2em;color:#555;">{{d}}</p>
+			            {% endfor %}
+
+		    		</div>
+		    	</div>
+	    	{% endfor %}
+	    {% endif %}
+    </div>
+    <div id="result" style="display:none;"></div>
+    <script>
+    	var hot=document.getElementById("hot");
+    	var noword=document.getElementById("noword");
+    	var result=document.getElementById("result");
+    	var word=document.getElementById("word");
+		function fadeIn(el){
+			var val=el.style.opacity=0;
+			el.timer=setInterval(function (){
+		    	var val=parseFloat(el.style.opacity);
+		    	if(val<1){
+		    		el.style.opacity=(val+=.1);
+		    	}else{
+		    		clearInterval(el.timer);
+		    	}
+		    },30)
+		}			
+    	function search(obj){
+			var keyword=document.getElementById("formControl").value;
+			if(keyword==''){
+				if(word){
+					word.style.display="none";
+				}
+				noword.style.display="inline-block";
+				hot.style.display="block";
+				result.style.display="none";
+				fadeIn(noword);
+			}else{
+			    var temp=document.createElement("form");        
+			    temp.action={{url_for('search')}};        
+			    temp.method="post";        
+			    temp.style.display="none";                
+			    var opt=document.createElement("textarea");        
+			    opt.name='keyword';        
+			    opt.value=keyword;       
+			    temp.appendChild(opt);
+			    document.body.appendChild(temp);        
+			    temp.submit();
+			}
+			
+		}
+    </script>
+{% endblock %}
